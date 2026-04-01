@@ -1,0 +1,30 @@
+model:
+  type: UnsupervisedPanModel
+  backbone_cfg:
+    type: AdaptiveFeatureExtractor
+    in_ms: 4
+    in_pan: 1
+    embed_dim: 64
+  neck_cfg:
+    type: SpectralGuidedInjectionNeck
+    embed_dim: 64
+  head_cfg:
+    type: SimpleConvHead # (复用你之前建的 Head)
+    in_channels: 64
+    out_channels: 4
+
+loss:
+  type: UnsupervisedPanLoss
+  spatial_weight: 1.0
+  spectral_weight: 0.5 # 通常空间保真权重大一些，防止光谱失真
+
+train:
+  epochs: 500
+  batch_size: 4
+  lr: 0.0002
+  weight_decay: 0.0001
+  work_dir: "./work_dirs/unsupervised_adaptive_pan"
+  resume_from: null
+  save_interval: 50
+  val_interval: 10
+  log_interval: 50
