@@ -1,0 +1,46 @@
+# configs/unsupervised_dynamic_pan.yaml
+model:
+  type: UnsupervisedPanModel
+  backbone_cfg:
+    type: DynamicAgnosticBackbone
+    embed_dim: 64
+  neck_cfg:
+    type: SpectralGuidedInjectionNeck
+    embed_dim: 64
+  head_cfg:
+    type: DynamicAgnosticHead
+    embed_dim: 64
+
+loss:
+  type: UnsupervisedPanLoss
+  spatial_weight: 1.0
+  spectral_weight: 0.5
+
+dataset_train:
+  type: PansharpeningH5Dataset
+  data_path: "D:/Nanqing/DeepLearning/Landsat_Pansharpen/datasets_h5/pansharpening_gf2/training_data/train_gf2.h5"
+  max_value: 1023.0
+  normalize_mode: '0_1'
+
+dataset_val:
+  type: PansharpeningH5Dataset
+  data_path: "D:/Nanqing/DeepLearning/Landsat_Pansharpen/datasets_h5/pansharpening_gf2/validation_data/valid_gf2.h5"
+  max_value: 1023.0
+  normalize_mode: '0_1'
+
+dataset_test:
+  type: PansharpeningH5Dataset
+  data_path: "D:/Nanqing/DeepLearning/Landsat_Pansharpen/datasets_h5/pansharpening_gf2/test_data/test_gf2_multiExm.h5"
+  max_value: 1023.0  
+  normalize_mode: '0_1'
+
+train:
+  epochs: 500
+  batch_size: 64
+  lr: 0.0002
+  weight_decay: 0.0001
+  work_dir: "./work_dirs/unsupervised_dynamic_pan"
+  resume_from: null
+  save_interval: 50
+  val_interval: 5
+  log_interval: 50
